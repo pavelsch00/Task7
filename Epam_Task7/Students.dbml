@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Students" Class="StudentsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Students;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="Epam_Task7.Properties.Settings" SettingsPropertyName="StudentsConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.EducationalSubjects" Member="EducationalSubjects">
+    <Type Name="EducationalSubjects">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SubjectName" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="SubjectType" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ExamainersId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="EducationalSubjects_SessionEducationalSubjects" Member="SessionEducationalSubjects" ThisKey="Id" OtherKey="EducationalSubjectId" Type="SessionEducationalSubjects" />
+      <Association Name="EducationalSubjects_StudentResults" Member="StudentResults" ThisKey="Id" OtherKey="SessionEducationalSubjectId" Type="StudentResults" />
+      <Association Name="Examiners_EducationalSubjects" Member="Examiners" ThisKey="ExamainersId" OtherKey="Id" Type="Examiners" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Examiners" Member="Examiners">
+    <Type Name="Examiners">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Examiners_EducationalSubjects" Member="EducationalSubjects" ThisKey="Id" OtherKey="ExamainersId" Type="EducationalSubjects" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Groups" Member="Groups">
+    <Type Name="Groups">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="SpecialtyId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Groups_Sessions" Member="Sessions" ThisKey="Id" OtherKey="GroupId" Type="Sessions" />
+      <Association Name="Groups_Students" Member="Students" ThisKey="Id" OtherKey="GroupId" Type="Students" />
+      <Association Name="Specialtys_Groups" Member="Specialtys" ThisKey="SpecialtyId" OtherKey="Id" Type="Specialtys" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SessionEducationalSubjects" Member="SessionEducationalSubjects">
+    <Type Name="SessionEducationalSubjects">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SessionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EducationalSubjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="EducationalSubjects_SessionEducationalSubjects" Member="EducationalSubjects" ThisKey="EducationalSubjectId" OtherKey="Id" Type="EducationalSubjects" IsForeignKey="true" DeleteRule="SET NULL" />
+      <Association Name="Sessions_SessionEducationalSubjects" Member="Sessions" ThisKey="SessionId" OtherKey="Id" Type="Sessions" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sessions" Member="Sessions">
+    <Type Name="Sessions">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SessionNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Sessions_SessionEducationalSubjects" Member="SessionEducationalSubjects" ThisKey="Id" OtherKey="SessionId" Type="SessionEducationalSubjects" />
+      <Association Name="Groups_Sessions" Member="Groups" ThisKey="GroupId" OtherKey="Id" Type="Groups" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Specialtys" Member="Specialtys">
+    <Type Name="Specialtys">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Specialtys_Groups" Member="Groups" ThisKey="Id" OtherKey="SpecialtyId" Type="Groups" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StudentResults" Member="StudentResults">
+    <Type Name="StudentResults">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="StudentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SessionEducationalSubjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Mark" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="EducationalSubjects_StudentResults" Member="EducationalSubjects" ThisKey="SessionEducationalSubjectId" OtherKey="Id" Type="EducationalSubjects" IsForeignKey="true" />
+      <Association Name="Students_StudentResults" Member="Students" ThisKey="StudentId" OtherKey="Id" Type="Students" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Students" Member="Students">
+    <Type Name="Students">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Gender" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateOfBirth" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Students_StudentResults" Member="StudentResults" ThisKey="Id" OtherKey="StudentId" Type="StudentResults" />
+      <Association Name="Groups_Students" Member="Groups" ThisKey="GroupId" OtherKey="Id" Type="Groups" IsForeignKey="true" DeleteRule="SET NULL" />
+    </Type>
+  </Table>
+</Database>
