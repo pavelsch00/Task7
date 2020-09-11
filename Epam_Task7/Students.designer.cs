@@ -167,8 +167,6 @@ namespace Epam_Task7
 		
 		private EntitySet<SessionEducationalSubjects> _SessionEducationalSubjects;
 		
-		private EntitySet<StudentResults> _StudentResults;
-		
 		private EntityRef<Examiners> _Examiners;
 		
     #region Определения метода расширяемости
@@ -188,7 +186,6 @@ namespace Epam_Task7
 		public EducationalSubjects()
 		{
 			this._SessionEducationalSubjects = new EntitySet<SessionEducationalSubjects>(new Action<SessionEducationalSubjects>(this.attach_SessionEducationalSubjects), new Action<SessionEducationalSubjects>(this.detach_SessionEducationalSubjects));
-			this._StudentResults = new EntitySet<StudentResults>(new Action<StudentResults>(this.attach_StudentResults), new Action<StudentResults>(this.detach_StudentResults));
 			this._Examiners = default(EntityRef<Examiners>);
 			OnCreated();
 		}
@@ -290,19 +287,6 @@ namespace Epam_Task7
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EducationalSubjects_StudentResults", Storage="_StudentResults", ThisKey="Id", OtherKey="SessionEducationalSubjectId")]
-		public EntitySet<StudentResults> StudentResults
-		{
-			get
-			{
-				return this._StudentResults;
-			}
-			set
-			{
-				this._StudentResults.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Examiners_EducationalSubjects", Storage="_Examiners", ThisKey="ExamainersId", OtherKey="Id", IsForeignKey=true, DeleteRule="SET NULL")]
 		public Examiners Examiners
 		{
@@ -364,18 +348,6 @@ namespace Epam_Task7
 		}
 		
 		private void detach_SessionEducationalSubjects(SessionEducationalSubjects entity)
-		{
-			this.SendPropertyChanging();
-			entity.EducationalSubjects = null;
-		}
-		
-		private void attach_StudentResults(StudentResults entity)
-		{
-			this.SendPropertyChanging();
-			entity.EducationalSubjects = this;
-		}
-		
-		private void detach_StudentResults(StudentResults entity)
 		{
 			this.SendPropertyChanging();
 			entity.EducationalSubjects = null;
@@ -717,6 +689,8 @@ namespace Epam_Task7
 		
 		private System.DateTime _Date;
 		
+		private EntitySet<StudentResults> _StudentResults;
+		
 		private EntityRef<EducationalSubjects> _EducationalSubjects;
 		
 		private EntityRef<Sessions> _Sessions;
@@ -737,6 +711,7 @@ namespace Epam_Task7
 		
 		public SessionEducationalSubjects()
 		{
+			this._StudentResults = new EntitySet<StudentResults>(new Action<StudentResults>(this.attach_StudentResults), new Action<StudentResults>(this.detach_StudentResults));
 			this._EducationalSubjects = default(EntityRef<EducationalSubjects>);
 			this._Sessions = default(EntityRef<Sessions>);
 			OnCreated();
@@ -830,6 +805,19 @@ namespace Epam_Task7
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SessionEducationalSubjects_StudentResults", Storage="_StudentResults", ThisKey="Id", OtherKey="SessionEducationalSubjectId")]
+		public EntitySet<StudentResults> StudentResults
+		{
+			get
+			{
+				return this._StudentResults;
+			}
+			set
+			{
+				this._StudentResults.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EducationalSubjects_SessionEducationalSubjects", Storage="_EducationalSubjects", ThisKey="EducationalSubjectId", OtherKey="Id", IsForeignKey=true, DeleteRule="SET NULL")]
 		public EducationalSubjects EducationalSubjects
 		{
@@ -916,6 +904,18 @@ namespace Epam_Task7
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_StudentResults(StudentResults entity)
+		{
+			this.SendPropertyChanging();
+			entity.SessionEducationalSubjects = this;
+		}
+		
+		private void detach_StudentResults(StudentResults entity)
+		{
+			this.SendPropertyChanging();
+			entity.SessionEducationalSubjects = null;
 		}
 	}
 	
@@ -1226,7 +1226,7 @@ namespace Epam_Task7
 		
 		private string _Mark;
 		
-		private EntityRef<EducationalSubjects> _EducationalSubjects;
+		private EntityRef<SessionEducationalSubjects> _SessionEducationalSubjects;
 		
 		private EntityRef<Students> _Students;
 		
@@ -1246,7 +1246,7 @@ namespace Epam_Task7
 		
 		public StudentResults()
 		{
-			this._EducationalSubjects = default(EntityRef<EducationalSubjects>);
+			this._SessionEducationalSubjects = default(EntityRef<SessionEducationalSubjects>);
 			this._Students = default(EntityRef<Students>);
 			OnCreated();
 		}
@@ -1306,7 +1306,7 @@ namespace Epam_Task7
 			{
 				if ((this._SessionEducationalSubjectId != value))
 				{
-					if (this._EducationalSubjects.HasLoadedOrAssignedValue)
+					if (this._SessionEducationalSubjects.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -1339,26 +1339,26 @@ namespace Epam_Task7
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EducationalSubjects_StudentResults", Storage="_EducationalSubjects", ThisKey="SessionEducationalSubjectId", OtherKey="Id", IsForeignKey=true)]
-		public EducationalSubjects EducationalSubjects
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SessionEducationalSubjects_StudentResults", Storage="_SessionEducationalSubjects", ThisKey="SessionEducationalSubjectId", OtherKey="Id", IsForeignKey=true)]
+		public SessionEducationalSubjects SessionEducationalSubjects
 		{
 			get
 			{
-				return this._EducationalSubjects.Entity;
+				return this._SessionEducationalSubjects.Entity;
 			}
 			set
 			{
-				EducationalSubjects previousValue = this._EducationalSubjects.Entity;
+				SessionEducationalSubjects previousValue = this._SessionEducationalSubjects.Entity;
 				if (((previousValue != value) 
-							|| (this._EducationalSubjects.HasLoadedOrAssignedValue == false)))
+							|| (this._SessionEducationalSubjects.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._EducationalSubjects.Entity = null;
+						this._SessionEducationalSubjects.Entity = null;
 						previousValue.StudentResults.Remove(this);
 					}
-					this._EducationalSubjects.Entity = value;
+					this._SessionEducationalSubjects.Entity = value;
 					if ((value != null))
 					{
 						value.StudentResults.Add(this);
@@ -1368,7 +1368,7 @@ namespace Epam_Task7
 					{
 						this._SessionEducationalSubjectId = default(Nullable<int>);
 					}
-					this.SendPropertyChanged("EducationalSubjects");
+					this.SendPropertyChanged("SessionEducationalSubjects");
 				}
 			}
 		}

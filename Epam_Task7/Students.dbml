@@ -7,7 +7,6 @@
       <Column Name="SubjectType" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="ExamainersId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="EducationalSubjects_SessionEducationalSubjects" Member="SessionEducationalSubjects" ThisKey="Id" OtherKey="EducationalSubjectId" Type="SessionEducationalSubjects" />
-      <Association Name="EducationalSubjects_StudentResults" Member="StudentResults" ThisKey="Id" OtherKey="SessionEducationalSubjectId" Type="StudentResults" />
       <Association Name="Examiners_EducationalSubjects" Member="Examiners" ThisKey="ExamainersId" OtherKey="Id" Type="Examiners" IsForeignKey="true" DeleteRule="SET NULL" />
     </Type>
   </Table>
@@ -34,6 +33,7 @@
       <Column Name="SessionId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="EducationalSubjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="SessionEducationalSubjects_StudentResults" Member="StudentResults" ThisKey="Id" OtherKey="SessionEducationalSubjectId" Type="StudentResults" />
       <Association Name="EducationalSubjects_SessionEducationalSubjects" Member="EducationalSubjects" ThisKey="EducationalSubjectId" OtherKey="Id" Type="EducationalSubjects" IsForeignKey="true" DeleteRule="SET NULL" />
       <Association Name="Sessions_SessionEducationalSubjects" Member="Sessions" ThisKey="SessionId" OtherKey="Id" Type="Sessions" IsForeignKey="true" DeleteRule="SET NULL" />
     </Type>
@@ -60,7 +60,7 @@
       <Column Name="StudentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SessionEducationalSubjectId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Mark" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Association Name="EducationalSubjects_StudentResults" Member="EducationalSubjects" ThisKey="SessionEducationalSubjectId" OtherKey="Id" Type="EducationalSubjects" IsForeignKey="true" />
+      <Association Name="SessionEducationalSubjects_StudentResults" Member="SessionEducationalSubjects" ThisKey="SessionEducationalSubjectId" OtherKey="Id" Type="SessionEducationalSubjects" IsForeignKey="true" />
       <Association Name="Students_StudentResults" Member="Students" ThisKey="StudentId" OtherKey="Id" Type="Students" IsForeignKey="true" DeleteRule="SET NULL" />
     </Type>
   </Table>
