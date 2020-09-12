@@ -14,8 +14,8 @@ namespace Test
         static void Main(string[] args)
         {
             GenerationReport report = new GenerationReport();
-            string path = @"..\..\..\..\..\Task7\Epam_Task7\Resources\Report1.xlsx";
-            report.GenerationSpecialtyResultBySession(path, 4, SortOrder.Ascending);
+            string path = @"..\..\..\..\..\Task7\Epam_Task7\Resources\Report3.xlsx";
+            report.GenerationAverageResultStudentByYear(path, 4, SortOrder.Ascending);
         }
     }
 }

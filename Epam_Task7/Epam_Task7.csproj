@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="CRUD\BasicMethodDb.cs" />
     <Compile Include="Enums\SortOrder.cs" />
+    <Compile Include="Interfaces\IBasicMethodDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -63,6 +64,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\Report2.xlsx" />
+    <None Include="Resources\Report1.xlsx" />
+    <None Include="Resources\Report3.xlsx" />
     <None Include="Students.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Students.designer.cs</LastGenOutput>
@@ -75,9 +79,7 @@
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
