@@ -1,4 +1,5 @@
-﻿using Epam_Task7.Reports;
+﻿using Epam_Task7.Enums;
+using Epam_Task7.Reports;
 using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,8 @@ namespace Test
         static void Main(string[] args)
         {
             GenerationReport report = new GenerationReport();
-            report.GenerateAverageSessionReport(4, XlSortOrder.xlAscending);
+            string path = @"..\..\..\..\..\Task7\Epam_Task7\Resources\Report1.xlsx";
+            report.GenerationSpecialtyResultBySession(path, 4, SortOrder.Ascending);
         }
     }
 }
