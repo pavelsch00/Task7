@@ -18,14 +18,15 @@ namespace Epam_Task7.CRUD
         /// <param name="collection">Objects to add to database tables.</param>
         public void Create(List<T> collection)
         {
-            var StudentsDataContext = new StudentsDataContext();
-
-            foreach (var item in collection)
+            using (var studentsDataContext = new StudentsDataContext())
             {
-                StudentsDataContext.GetTable<T>().InsertOnSubmit(item);
-            }
+                foreach (var item in collection)
+                {
+                    studentsDataContext.GetTable<T>().InsertOnSubmit(item);
+                }
 
-            StudentsDataContext.SubmitChanges();
+                studentsDataContext.SubmitChanges();
+            }
         }
 
         /// <summary>
@@ -41,22 +42,22 @@ namespace Epam_Task7.CRUD
         /// <returns>Item</returns>
         public T Read(int id)
         {
-            var Students = new StudentsDataContext();
+            var studentsDataContext = new StudentsDataContext();
 
-            ParameterExpression ParameterExpression = Expression.Parameter(typeof(T), "item");
+            var expressionParameter = Expression.Parameter(typeof(T), "item");
             var expression = Expression.Lambda<Func<T, bool>>
                 (
                 Expression.Equal(
                     Expression.Property(
-                        ParameterExpression,
+                        expressionParameter,
                         "Id"
                         ),
                     Expression.Constant(id)
                     ),
-                new[] { ParameterExpression }
+                new[] { expressionParameter }
                 );
 
-            T newItem = Students.GetTable<T>().FirstOrDefault(expression);
+            T newItem = studentsDataContext.GetTable<T>().FirstOrDefault(expression);
 
             return newItem;
 
@@ -69,45 +70,62 @@ namespace Epam_Task7.CRUD
         /// <param name="obj">Object that inherits the class BaseModel</param>
         public void Update(int id, T obj)
         {
-            var students = new StudentsDataContext();
-
-            List<PropertyInfo> propertys = typeof(T).GetProperties()
-                .Where(item => (!item.PropertyType.IsClass || (item.PropertyType == typeof(string)))
-                && (item.Name != "Id")).ToList();
-
-            var parameter = Expression.Parameter(typeof(T), "item");
-            var expression = Expression.Lambda<Func<T, bool>>
-                (
-                Expression.Equal(
-                    Expression.Property(
-                        parameter,
-                        "id"
-                        ),
-                    Expression.Constant(id)
-                    ),
-                new[] { parameter }
-                );
-
-            T newItem = students.GetTable<T>().First(expression);
-
-            foreach (PropertyInfo item in propertys)
+            using (var studentsDataContext = new StudentsDataContext())
             {
-                item.SetValue(newItem, item.GetValue(obj));
-            }
+                List<PropertyInfo> propertys = typeof(T).GetProperties()
+                    .Where(item => (!item.PropertyType.IsClass || (item.PropertyType == typeof(string)))
+                    && (item.Name != "Id")).ToList();
 
-            students.SubmitChanges();
+                var expressionParameter = Expression.Parameter(typeof(T), "item");
+                var expression = Expression.Lambda<Func<T, bool>>
+                    (
+                    Expression.Equal(
+                        Expression.Property(
+                            expressionParameter,
+                            "id"
+                            ),
+                        Expression.Constant(id)
+                        ),
+                    new[] { expressionParameter }
+                    );
+
+                T newItem = studentsDataContext.GetTable<T>().First(expression);
+
+                foreach (PropertyInfo item in propertys)
+                {
+                    item.SetValue(newItem, item.GetValue(obj));
+                }
+
+                studentsDataContext.SubmitChanges();
+            }
         }
 
         /// <summary>
         /// Method delete object from database.
         /// </summary>
-        /// <param name="obj">Object.</param>
-        public void Delete(T item)
+        /// <param name="id">Object id.</param>
+        public void Delete(int id)
         {
-            var studentsDataContext = new StudentsDataContext();
-            studentsDataContext.GetTable<T>().DeleteOnSubmit(item);
+            using (var StudentsDataContext = new StudentsDataContext())
+            {
+                var expressionParameter = Expression.Parameter(typeof(T), "item");
+                var expression = Expression.Lambda<Func<T, bool>>
+                    (
+                    Expression.Equal(
+                        Expression.Property(
+                            expressionParameter,
+                            "id"
+                            ),
+                        Expression.Constant(id)
+                        ),
+                    new[] { expressionParameter }
+                    );
 
-            studentsDataContext.SubmitChanges();
+                T entity = StudentsDataContext.GetTable<T>().First(expression);
+
+                StudentsDataContext.GetTable<T>().DeleteOnSubmit(entity);
+                StudentsDataContext.SubmitChanges();
+            }
         }
     }
 }

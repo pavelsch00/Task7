@@ -37,7 +37,7 @@ namespace Epam_Task7.Interfaces
         /// Method delete object from database.
         /// </summary>
         /// <param name="obj">Object.</param>
-        void Delete(T obj);
+        void Delete(int id);
 
     }
 }
